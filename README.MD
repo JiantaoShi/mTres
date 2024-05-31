@@ -14,7 +14,7 @@ The gene expression input is a pandas data frame, saved wither as a `TAB` separa
 For given pathways/signatures, the following script calculates a score for each cell which quantifies the overall activity of given signatures/pathways.
 
 ```
-usage: mtres_response.py [-h] -E EXPRESSION_FILE -G GENESETS_GMT_FILE -S SIGNATURE_NAME_FILE -O OUTPUT_TAG
+usage: mtres_response.py [-h] -E EXPRESSION_FILE -G GENESETS_GMT_FILE -S SIGNATURE_NAME_FILE [-N RESPONSE_NAME] -O OUTPUT_TAG
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -24,8 +24,10 @@ optional arguments:
                         Background gene sets in GMT format.
   -S SIGNATURE_NAME_FILE, --signature_name_file SIGNATURE_NAME_FILE
                         Names of the signatures, one name in one line.
+  -N RESPONSE_NAME, --response_name RESPONSE_NAME
+                        Response name [Proliferation].
   -O OUTPUT_TAG, --output_tag OUTPUT_TAG
-                        Prefix for output files.
+                        Prefix for output files
 ```
 
 Please make sure gene set names specified with `-S` can be found in GMT input file.

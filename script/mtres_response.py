@@ -8,10 +8,11 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-E', "--expression_file", type=str, default=None, required=True, help="Gene expression file.")
 parser.add_argument('-G', "--genesets_GMT_file", type=str, default=None, required=True, help="Background gene sets in GMT format.")
 parser.add_argument('-S', "--signature_name_file", type=str, default=None, required=True, help="Names of the signatures, one name in one line.")
+parser.add_argument('-N', "--response_name", type=str, default='Proliferation', required=False, help="Names of the signatures, one name in one line.")
 parser.add_argument('-O', "--output_tag", type=str, default=None, required=True, help="Prefix for output files.")
 args = parser.parse_args()
 
-def profile_geneset_signature(expression, geneset_file, name_file):
+def profile_geneset_signature(expression, geneset_file, name_file, response_name):
     # all gene sets
     signature = []
     fin = open(geneset_file)
@@ -40,7 +41,7 @@ def profile_geneset_signature(expression, geneset_file, name_file):
     background.name = 'study bias'
     
     X = signature.loc[:, names].mean(axis=1)
-    X.name = 'Proliferation'
+    X.name = response_name
     
     X = pandas.concat([background, X], axis=1, join='inner')
     
@@ -70,6 +71,6 @@ def read_expression(input_file):
     return expression
 
 expression = read_expression(args.expression_file)
-result = profile_geneset_signature(expression, args.genesets_GMT_file, args.signature_name_file)
+result = profile_geneset_signature(expression, args.genesets_GMT_file, args.signature_name_file, args.response_name)
 
-result.to_csv(args.output_tag + '_Prolifertion.tsv', sep='\t')
+result.to_csv(args.output_tag + '_Response.tsv', sep='\t')
