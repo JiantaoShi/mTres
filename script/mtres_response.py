@@ -8,7 +8,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-E', "--expression_file", type=str, default=None, required=True, help="Gene expression file.")
 parser.add_argument('-G', "--genesets_GMT_file", type=str, default=None, required=True, help="Background gene sets in GMT format.")
 parser.add_argument('-S', "--signature_name_file", type=str, default=None, required=True, help="Names of the signatures, one name in one line.")
-parser.add_argument('-N', "--response_name", type=str, default='Proliferation', required=False, help="Names of the signatures, one name in one line.")
+parser.add_argument('-N', "--response_name", type=str, default='Proliferation', required=False, help="Response name [Proliferation].")
+parser.add_argument("-P", "--p_value", help="Output p-values as a file.", action="store_true")
 parser.add_argument('-O', "--output_tag", type=str, default=None, required=True, help="Prefix for output files.")
 args = parser.parse_args()
 
@@ -46,9 +47,10 @@ def profile_geneset_signature(expression, geneset_file, name_file, response_name
     X = pandas.concat([background, X], axis=1, join='inner')
     
     # regression
+    # coefficient (beta), standard error (se), beta/se, pvalue 
     result = CytoSig.ridge_significance_test(X, expression, alpha=0, alternative="two-sided", nrand=0, verbose=1)
     
-    return result[2]
+    return result
 
 def read_expression(input_file):
     # read input
@@ -72,5 +74,7 @@ def read_expression(input_file):
 
 expression = read_expression(args.expression_file)
 result = profile_geneset_signature(expression, args.genesets_GMT_file, args.signature_name_file, args.response_name)
+result[2].to_csv(args.output_tag + '_Response.tsv', sep='\t')
 
-result.to_csv(args.output_tag + '_Response.tsv', sep='\t')
+if args.p_value:
+    result[3].to_csv(args.output_tag + '_pValue.tsv', sep='\t')
