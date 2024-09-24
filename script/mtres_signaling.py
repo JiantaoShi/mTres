@@ -7,6 +7,7 @@ import CytoSig
 parser = argparse.ArgumentParser()
 parser.add_argument('-E', "--expression_file", type=str, default=None, required=True, help="Gene expression file.")
 parser.add_argument('-M', "--model_matrix_file", type=str, default=None, required=True, help="Quantitative signatures for cytokines.")
+parser.add_argument("-P", "--p_value", help="Output p-values as a file.", action="store_true")
 parser.add_argument('-O', "--output_tag", type=str, default=None, required=True, help="Prefix for output files.")
 args = parser.parse_args()
 
@@ -46,9 +47,12 @@ def compute_signaling(expression, model_matrix_file):
         sys.exit(1)
     
     # get the z-scores
-    result_signaling = result_signaling[2]
+    result_signaling = result_signaling
     return result_signaling
 
 expression = read_expression(args.expression_file)
 result_signaling = compute_signaling(expression, args.model_matrix_file)
-result_signaling.to_csv(args.output_tag + '_Signaling.tsv', sep='\t')
+result_signaling[2].to_csv(args.output_tag + '_Signaling.tsv', sep='\t')
+
+if args.p_value:
+    result_signaling[3].to_csv(args.output_tag + '_pValue.tsv', sep='\t')
