@@ -26,6 +26,7 @@ optional arguments:
                         Names of the signatures, one name in one line.
   -N RESPONSE_NAME, --response_name RESPONSE_NAME
                         Response name [Proliferation].
+  -P, --p_value         Output p-values as a file.
   -O OUTPUT_TAG, --output_tag OUTPUT_TAG
                         Prefix for output files
 ```
@@ -44,6 +45,7 @@ optional arguments:
                         Gene expression file.
   -M MODEL_MATRIX_FILE, --model_matrix_file MODEL_MATRIX_FILE
                         Quantitative signatures for cytokines.
+  -P, --p_value         Output p-values as a file.
   -O OUTPUT_TAG, --output_tag OUTPUT_TAG
                         Prefix for output files.
 ```
